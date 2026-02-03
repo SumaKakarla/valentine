@@ -1,189 +1,278 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<title>My Valentine 💘</title>
 
-  <meta charset="UTF-8">
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+  }
 
-  <title>Be My Valentine</title>
+  /* 💕 Background Layer */
+  .bg-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
 
-  <style>
+  .heart, .star {
+    position: absolute;
+    bottom: -30px;
+    animation: floatUp linear forwards;
+    opacity: 0.9;
+  }
 
-    body {
+  .heart {
+    color: rgba(255, 255, 255, 0.9);
+  }
 
-      background: #ffe6eb;
+  .star {
+    color: rgba(255, 255, 255, 0.7);
+  }
 
-      font-family: 'Arial', sans-serif;
-
-      text-align: center;
-
-      padding-top: 80px;
-
+  @keyframes floatUp {
+    from {
+      transform: translateY(0) scale(1);
+      opacity: 1;
     }
-
- 
-
-    h1 {
-
-      color: #d6336c;
-
-      font-size: 36px;
-
+    to {
+      transform: translateY(-115vh) scale(2);
+      opacity: 0;
     }
+  }
 
- 
+  .card {
+    background: white;
+    padding: 45px 50px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.25);
+    width: 520px;
+    z-index: 2;
+  }
 
-    .buttons {
+  h1 {
+    color: #d6336c;
+    font-size: 32px;
+    margin-bottom: 35px;
+  }
 
-      margin-top: 40px;
+  .buttons {
+    position: relative;
+    width: 100%;
+    height: 220px;
+  }
 
-      position: relative;
+  button {
+    font-size: 18px;
+    padding: 14px 36px;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    position: absolute;
+    user-select: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
 
-      height: 200px;
+  #yesBtn {
+    background: #ff2e63;
+    color: white;
+    left: 35%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+  }
 
+  #noBtn {
+    background: #9e9e9e;
+    color: white;
+    left: 65%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+  }
+
+  .taunt {
+    position: absolute;
+    font-size: 15px;
+    color: #ff2e63;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .celebration {
+    display: none;
+  }
+
+  .celebration h1 {
+    font-size: 34px;
+    color: #ff2e63;
+  }
+
+  .celebration p {
+    font-size: 22px;
+    color: #444;
+  }
+
+  .signature {
+    margin-top: 18px;
+    font-size: 20px;
+    color: #d6336c;
+    font-weight: bold;
+  }
+
+  .confetti {
+    position: fixed;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    animation: fall linear forwards;
+    z-index: 3;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
     }
-
- 
-
-    button {
-
-      font-size: 18px;
-
-      padding: 12px 30px;
-
-      border: none;
-
-      border-radius: 8px;
-
-      cursor: pointer;
-
-      position: absolute;
-
-    }
-
- 
-
-    #yesBtn {
-
-      background-color: red;
-
-      color: white;
-
-      left: 40%;
-
-    }
-
- 
-
-    #noBtn {
-
-      background-color: grey;
-
-      color: white;
-
-      left: 55%;
-
-    }
-
- 
-
-    .celebration {
-
-      display: none;
-
-    }
-
- 
-
-    .celebration h1 {
-
-      font-size: 40px;
-
-      color: red;
-
-    }
-
- 
-
-    .celebration img {
-
-      width: 250px;
-
-      margin-top: 20px;
-
-    }
-
-  </style>
-
+  }
+</style>
 </head>
 
 <body>
 
- 
+<!-- 💕 Background hearts & stars -->
+<div class="bg-layer" id="bgLayer"></div>
 
-  <div id="question">
+<!-- 🎶 Music -->
+<audio id="bgMusic">
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
 
-    <h1>Roshu, will you be my Valentine? 💘</h1>
+<div class="card" id="question">
+  <h1>Roshu, will you be my Valentine? 💖</h1>
 
- 
-
-    <div class="buttons">
-
-      <button id="yesBtn" onclick="sayYes()">Yes ❤️</button>
-
-      <button id="noBtn" onmouseover="moveNo()">No 🙄</button>
-
-    </div>
-
+  <div class="buttons" id="buttonsBox">
+    <button id="yesBtn" onclick="sayYes()">Yes ❤️</button>
+    <button id="noBtn">No 🙄</button>
+    <div class="taunt" id="taunt">Nice try 😜</div>
   </div>
+</div>
 
- 
+<div class="card celebration" id="celebration">
+  <h1>BEST DECISION EVER 🎉</h1>
+  <p>I love you Roshu Chitti Chepa Pilla ❤️❤️❤️❤️❤️</p>
+  <div class="signature">— Wifey 💕</div>
+</div>
 
-  <div class="celebration" id="celebration">
+<script>
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
+  const box = document.getElementById("buttonsBox");
+  const taunt = document.getElementById("taunt");
+  const music = document.getElementById("bgMusic");
+  const bgLayer = document.getElementById("bgLayer");
 
-    <h1>BEST DECISION EVER 🎉💃🕺</h1>
+  let noScale = 1;
+  const MIN_SCALE = 0.65;
 
-    <p style="font-size:22px;">I love you ❤️</p>
+  function teleportNo() {
+    const boxRect = box.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const padding = 10;
 
- 
+    const maxX = boxRect.width - btnRect.width - padding;
+    const maxY = boxRect.height - btnRect.height - padding;
 
-    <!-- Replace image link with any party/celebration image you like -->
+    const positions = [
+      { x: padding, y: padding },
+      { x: maxX, y: padding },
+      { x: padding, y: maxY },
+      { x: maxX, y: maxY }
+    ];
 
-    <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExODk2bGdoazZjb2lnbWV2em9xbmlvMmE0bHcweXdmcG56b3cwZWc5ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XIRIwHRO8N4IMJr7jd/giphy.gif" alt="Celebration">
+    noBtn.style.opacity = 0;
 
- 
+    setTimeout(() => {
+      const pos = positions[Math.floor(Math.random() * positions.length)];
+      noScale = Math.max(MIN_SCALE, noScale - 0.08);
 
-  <script>
+      noBtn.style.transform = `scale(${noScale})`;
+      noBtn.style.left = pos.x + "px";
+      noBtn.style.top = pos.y + "px";
+      noBtn.style.opacity = 1;
 
-    function moveNo() {
+      taunt.style.left = pos.x + "px";
+      taunt.style.top = pos.y - 24 + "px";
+      taunt.style.opacity = 1;
 
-      const noBtn = document.getElementById("noBtn");
+      setTimeout(() => taunt.style.opacity = 0, 700);
+    }, 120);
+  }
 
-      const x = Math.random() * 300;
+  ["mouseenter", "touchstart", "pointerdown"].forEach(evt =>
+    noBtn.addEventListener(evt, teleportNo)
+  );
 
-      const y = Math.random() * 150;
+  document.addEventListener("mousemove", e => {
+    const r = yesBtn.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width / 2);
+    const dy = e.clientY - (r.top + r.height / 2);
+    const dist = Math.sqrt(dx*dx + dy*dy);
 
-      noBtn.style.left = x + "px";
+    yesBtn.style.transform =
+      dist < 140
+        ? "translate(-50%, -50%) scale(1.15)"
+        : "translate(-50%, -50%) scale(1)";
+  });
 
-      noBtn.style.top = y + "px";
+  function startConfetti() {
+    setInterval(() => {
+      for (let i = 0; i < 6; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.backgroundColor = `hsl(${Math.random()*360},100%,70%)`;
+        c.style.width = c.style.height = Math.random()*6 + 8 + "px";
+        c.style.animationDuration = (Math.random()*2 + 2) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+      }
+    }, 80);
+  }
 
+  function sayYes() {
+    document.getElementById("question").style.display = "none";
+    document.getElementById("celebration").style.display = "block";
+    music.play();
+    startConfetti();
+  }
+
+  /* 💕💫 LOTS of hearts & stars */
+  setInterval(() => {
+    for (let i = 0; i < 4; i++) {
+      const el = document.createElement("div");
+      el.className = Math.random() > 0.35 ? "heart" : "star";
+      el.innerHTML = el.className === "heart" ? "❤️" : "✨";
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = Math.random() * 24 + 14 + "px";
+      el.style.animationDuration = (Math.random() * 5 + 4) + "s";
+      bgLayer.appendChild(el);
+      setTimeout(() => el.remove(), 11000);
     }
-
- 
-
-    function sayYes() {
-
-      document.getElementById("question").style.display = "none";
-
-      document.getElementById("celebration").style.display = "block";
-
-    }
-
-  </script>
-
- 
+  }, 180);
+</script>
 
 </body>
-
 </html>
