@@ -188,38 +188,34 @@
   const MIN_SCALE = 0.65;
 
   function teleportNo() {
-    const boxRect = box.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
-    const padding = 10;
+  const boxRect = box.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+  const padding = 10;
 
-    const maxX = boxRect.width - btnRect.width - padding;
-    const maxY = boxRect.height - btnRect.height - padding;
+  const maxX = boxRect.width - btnRect.width - padding;
+  const maxY = boxRect.height - btnRect.height - padding;
 
-    const positions = [
-      { x: padding, y: padding },
-      { x: maxX, y: padding },
-      { x: padding, y: maxY },
-      { x: maxX, y: maxY }
-    ];
+  // 🎯 Random position anywhere inside the box
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
 
-    noBtn.style.opacity = 0;
+  noBtn.style.opacity = 0;
 
-    setTimeout(() => {
-      const pos = positions[Math.floor(Math.random() * positions.length)];
-      noScale = Math.max(MIN_SCALE, noScale - 0.08);
+  setTimeout(() => {
+    noScale = Math.max(MIN_SCALE, noScale - 0.08);
 
-      noBtn.style.transform = `scale(${noScale})`;
-      noBtn.style.left = pos.x + "px";
-      noBtn.style.top = pos.y + "px";
-      noBtn.style.opacity = 1;
+    noBtn.style.transform = `scale(${noScale})`;
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+    noBtn.style.opacity = 1;
 
-      taunt.style.left = pos.x + "px";
-      taunt.style.top = pos.y - 24 + "px";
-      taunt.style.opacity = 1;
+    taunt.style.left = randomX + "px";
+    taunt.style.top = randomY - 24 + "px";
+    taunt.style.opacity = 1;
 
-      setTimeout(() => taunt.style.opacity = 0, 700);
-    }, 120);
-  }
+    setTimeout(() => taunt.style.opacity = 0, 700);
+  }, 120);
+}
 
   ["mouseenter", "touchstart", "pointerdown"].forEach(evt =>
     noBtn.addEventListener(evt, teleportNo)
